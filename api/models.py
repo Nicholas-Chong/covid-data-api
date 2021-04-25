@@ -47,9 +47,7 @@ class TimeseriesCasesRegional(models.Model):
     report = models.ForeignKey(
         Report, on_delete=models.CASCADE, related_name='timeseries_regional'
     )
-    phu = models.ForeignKey(PublicHealthUnit, on_delete=models.CASCADE)
-    new_cases = models.IntegerField(default=0)
-    total_cases = models.IntegerField(default=0)
+    
 
     def __str__(self):
         return str(self.report.date)
