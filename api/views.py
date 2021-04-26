@@ -5,9 +5,12 @@ from django.db.models import Prefetch
 from django.forms.models import model_to_dict
 from pprint import pprint
 import json
+import time
 
 
 def index(request):
+    start = time.process_time()
+    
     # Retrieve all rows of timeseries_cases and timeseries_vaccination
     report = Report.objects.prefetch_related(
         Prefetch('timeseries_cases', to_attr='ts_cases'),
@@ -45,7 +48,11 @@ def index(request):
                 res['ts_variant_start'] = count
         
         res['data'].append(to_append)
+    
+    end = time.process_time() - start
+    print(end)
 
     response = HttpResponse(json.dumps(res), content_type="application/json")
     response['Access-Control-Allow-Origin'] = '*'
+    response['Server-Timing'] = f'db;desc="Database";dur={end}'
     return response
