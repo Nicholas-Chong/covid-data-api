@@ -59,6 +59,8 @@ def create_timeseries_cases():
             new_tests=row['Total tests completed in the last day'],
             total_cases=row['Total Cases'],
             total_deaths=row['Deaths'],
+            total_resolved=row['Resolved'],
+            total_active=row['Total Cases'] - row['Deaths'] - row['Resolved'],
         )
 
 
@@ -162,8 +164,8 @@ def create_timeseries_vaccination():
 
 def run():
     # create_phus()
-    # create_timeseries_cases()
-    create_timeseries_cases_regional()
+    create_timeseries_cases()
+    # create_timeseries_cases_regional()
     # create_timeseries_vaccination()
 
     
