@@ -18,6 +18,8 @@ class TimeseriesCases(models.Model):
     new_tests = models.IntegerField(default=0)
     total_cases = models.IntegerField(default=0)
     total_deaths = models.IntegerField(default=0)
+    total_resolved = models.IntegerField(default=0)
+    total_active = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.report.date)
