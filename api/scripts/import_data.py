@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 from api.models import (
     Report, TimeseriesCases, TimeseriesCasesRegional, TimeseriesVaccination,
-    PublicHealthUnit
+    PublicHealthUnit, TimeseriesVariant,
 )
 
 
@@ -64,6 +64,12 @@ def create_timeseries_cases():
             total_deaths=row['Deaths'],
             total_resolved=row['Resolved'],
             total_active=row['Total Cases'] - row['Deaths'] - row['Resolved'],
+        )
+        TimeseriesVariant.objects.create(
+            report=report,
+            p1=row['Total_Lineage_P.1'],
+            b1351=row['Total_Lineage_B.1.351'],
+            b117=row['Total_Lineage_B.1.1.7'],
         )
 
 
@@ -166,7 +172,7 @@ def create_timeseries_vaccination():
 
 
 def run():
-    create_phus()
+    # create_phus()
     create_timeseries_cases()
     create_timeseries_cases_regional()
     create_timeseries_vaccination()
