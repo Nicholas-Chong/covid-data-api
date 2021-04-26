@@ -91,9 +91,9 @@ def import_data():
             new_vaccinations = row['previous_day_doses_administered'],
             num_fully_vaccinated = row['total_individuals_fully_vaccinated'],
             num_part_vaccinated = row['num_part_vaccinated'],            
-            variant_p1 = row['Total_Lineage_P.1'],
-            variant_b1351 = row['Total_Lineage_B.1.351'],
-            variant_b117 = row['Total_Lineage_B.1.1.7'],
+            total_variant_p1 = row['Total_Lineage_P.1'],
+            total_variant_b1351 = row['Total_Lineage_B.1.351'],
+            total_variant_b117 = row['Total_Lineage_B.1.1.7'],
         )
         print(report)
 
