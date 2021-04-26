@@ -86,3 +86,12 @@ class TimeseriesCasesRegional(models.Model):
 
     def __str__(self):
         return str(self.report.date)
+
+
+class TimeseriesVariant(models.Model):
+    report = models.ForeignKey(
+        Report, on_delete=models.CASCADE, related_name='variants'
+    )
+    p1 = models.IntegerField(default=0)
+    b1351 = models.IntegerField(default=0)
+    b117 = models.IntegerField(default=0)
