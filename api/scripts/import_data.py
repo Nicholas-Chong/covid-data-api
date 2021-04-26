@@ -51,7 +51,10 @@ def create_timeseries_cases():
         row = i[1].to_dict()
         date = datetime.strptime(row['Reported Date'], '%Y-%m-%d').date()
 
-        report = Report.objects.create(date=date)
+        report = Report.objects.create(
+            date=date,
+            date_string=str(date),
+        )
         TimeseriesCases.objects.create(
             report=report,
             new_cases=row['new_cases'],
@@ -163,10 +166,10 @@ def create_timeseries_vaccination():
 
 
 def run():
-    # create_phus()
+    create_phus()
     create_timeseries_cases()
-    # create_timeseries_cases_regional()
-    # create_timeseries_vaccination()
+    create_timeseries_cases_regional()
+    create_timeseries_vaccination()
 
     
 
