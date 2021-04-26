@@ -95,3 +95,6 @@ class TimeseriesVariant(models.Model):
     p1 = models.IntegerField(default=0)
     b1351 = models.IntegerField(default=0)
     b117 = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.report.date)
