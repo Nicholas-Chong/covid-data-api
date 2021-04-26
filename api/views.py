@@ -12,13 +12,14 @@ def index(request):
     report = Report.objects.prefetch_related(
         Prefetch('timeseries_cases', to_attr='ts_cases'),
         Prefetch('timeseries_vaccination', to_attr='ts_vacci'),
-        # Prefetch('timeseries_regional', to_attr='ts_regio'),
+        Prefetch('variants', to_attr='ts_variants'),
     )
 
     res = {}
     res['data'] = []
     res['ts_cases_start'] = -1
     res['ts_vacci_start'] = -1
+    res['ts_variant_start'] = -1
 
     for count, i in enumerate(report):
         to_append = model_to_dict(i, exclude=['date'])
@@ -35,6 +36,13 @@ def index(request):
 
             if res['ts_vacci_start'] == -1:
                 res['ts_vacci_start'] = count
+        
+        if i.ts_variants[0].b117 != 0:
+            ts_variant_report = model_to_dict(i.ts_variants[0], exclude=['report'])
+            to_append['ts_variant'] = ts_variant_report
+
+            if res['ts_variant_start'] == -1:
+                res['ts_variant_start'] = count
         
         res['data'].append(to_append)
 
