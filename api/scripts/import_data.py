@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from api.models import Report
+from api.models import Report, RegionalReport
 
 
 def import_data():
@@ -72,9 +72,16 @@ def import_data():
         daily_report['total_doses_administered'] - 
         daily_report['total_doses_in_fully_vaccinated_individuals ']
     )
+    daily_report['positivity'] = (
+        [0]*69 + 
+        list((
+            daily_report['new_cases'] / 
+            daily_report['Total tests completed in the last day'] * 100
+        ).round(2))[69:]
+    )
 
     print(daily_report.columns)
-    print(daily_report)
+    print(daily_report[60:80])
 
     for i in daily_report.iterrows():
         row = i[1].to_dict()
@@ -84,6 +91,7 @@ def import_data():
             new_cases = row['new_cases'],
             new_deaths = row['new_deaths'],
             new_tests = row['Total tests completed in the last day'],
+            test_positivity = row['positivity'],
             total_cases = row['Total Cases'],
             total_deaths = row['Deaths'],
             total_resolved = row['Resolved'],
@@ -98,8 +106,64 @@ def import_data():
         print(report)
 
 
+def create_timeseries_cases_regional():
+    link2 = (
+        'https://data.ontario.ca/dataset/f4f86e54-872d-43f8-8a86-3892fd3cb5e6/'
+        'resource/8a88fe6d-d8fb-41a3-9d04-f0550a44999f/download/daily_change_i'
+        'n_cases_by_phu.csv'
+    )
+
+    daily_change_phu = pd.read_csv(link2)
+    daily_change_phu = daily_change_phu.drop(columns=['Total'])
+    daily_change_phu = daily_change_phu.fillna(0)
+
+    records = daily_change_phu.to_dict(orient='records')
+
+    for i in records:
+        RegionalReport.objects.create(
+            date = datetime.strptime(i['Date'], '%Y-%m-%d').date(),
+            date_string = i['Date'],
+            Algoma_Public_Health_Unit =  i['Algoma_Public_Health_Unit'],
+            Brant_County_Health_Unit =  i['Brant_County_Health_Unit'],
+            Chatham_Kent_Health_Unit =  i['Chatham-Kent_Health_Unit'],
+            Durham_Region_Health_Department =  i['Durham_Region_Health_Department'],
+            Eastern_Ontario_Health_Unit =  i['Eastern_Ontario_Health_Unit'],
+            Grey_Bruce_Health_Unit =  i['Grey_Bruce_Health_Unit'],
+            Haldimand_Norfolk_Health_Unit =  i['Haldimand-Norfolk_Health_Unit'],
+            Haliburton_Kawartha_Pine_Ridge_District_Health_Unit =  i['Haliburton,_Kawartha,_Pine_Ridge_District_Health_Unit'],
+            Halton_Region_Health_Department =  i['Halton_Region_Health_Department'],
+            Hamilton_Public_Health_Services =  i['Hamilton_Public_Health_Services'],
+            Hastings_and_Prince_Edward_Counties_Health_Unit =  i['Hastings_and_Prince_Edward_Counties_Health_Unit'],
+            Huron_Perth_District_Health_Unit =  i['Huron_Perth_District_Health_Unit'],
+            Kingston_Frontenac_and_Lennox_and_Addington_Public_Health =  i['Kingston,_Frontenac_and_Lennox_&_Addington_Public_Health'],
+            Lambton_Public_Health =  i['Lambton_Public_Health'],
+            Leeds_Grenville_and_Lanark_District_Health_Unit =  i['Leeds,_Grenville_and_Lanark_District_Health_Unit'],
+            Middlesex_London_Health_Unit =  i['Middlesex-London_Health_Unit'],
+            Niagara_Region_Public_Health_Department =  i['Niagara_Region_Public_Health_Department'],
+            North_Bay_Parry_Sound_District_Health_Unit =  i['North_Bay_Parry_Sound_District_Health_Unit'],
+            Northwestern_Health_Unit =  i['Northwestern_Health_Unit'],
+            Ottawa_Public_Health =  i['Ottawa_Public_Health'],
+            Peel_Public_Health =  i['Peel_Public_Health'],
+            Peterborough_Public_Health =  i['Peterborough_Public_Health'],
+            Porcupine_Health_Unit =  i['Porcupine_Health_Unit'],
+            Region_of_WaterlooPublic_Health =  i['Region_of_Waterloo,_Public_Health'],
+            Renfrew_County_and_District_Health_Unit =  i['Renfrew_County_and_District_Health_Unit'],
+            Simcoe_Muskoka_District_Health_Unit =  i['Simcoe_Muskoka_District_Health_Unit'],
+            Southwestern_Public_Health =  i['Southwestern_Public_Health'],
+            Sudbury_and_District_Health_Unit =  i['Sudbury_&_District_Health_Unit'],
+            Thunder_Bay_District_Health_Unit =  i['Thunder_Bay_District_Health_Unit'],
+            Timiskaming_Health_Unit =  i['Timiskaming_Health_Unit'],
+            Toronto_Public_Health =  i['Toronto_Public_Health'],
+            Wellington_Dufferin_Guelph_Public_Health =  i['Wellington-Dufferin-Guelph_Public_Health'],
+            Windsor_Essex_County_Health_Unit =  i['Windsor-Essex_County_Health_Unit'],
+            York_Region_Public_Health_Services =  i['York_Region_Public_Health_Services'],
+        )
+
+
+
 def run():
     import_data()
+    create_timeseries_cases_regional()
 
     
 
