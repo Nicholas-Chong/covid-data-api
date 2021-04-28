@@ -20,19 +20,21 @@ def import_data():
 
     str_to_date = lambda x: datetime.strptime(x, '%Y-%m-%d').date()
     net_new = lambda x: [x[0]] + [x[i] - x[i-1] for i in range(1, len(x))]
-    remove_comma_to_int = lambda x: int(x.replace(',', ''))
+    remove_comma_to_int = lambda x: int(str(x).replace('.0', ''))
 
     case_data = pd.read_csv(link1).fillna(0)
     vaxx_data = pd.read_csv(link3).fillna('0')
 
-    vaxx_data['previous_day_doses_administered'] = (
-        vaxx_data['previous_day_doses_administered'].apply(remove_comma_to_int)
-    )
+    print(vaxx_data)
+
+    # vaxx_data['previous_day_doses_administered'] = (
+    #     vaxx_data['previous_day_doses_administered'].apply(remove_comma_to_int)
+    # )
     vaxx_data['total_doses_administered'] = (
         vaxx_data['total_doses_administered'].apply(remove_comma_to_int)
     )
-    vaxx_data['total_doses_in_fully_vaccinated_individuals '] = (
-        vaxx_data['total_doses_in_fully_vaccinated_individuals '].apply(remove_comma_to_int)
+    vaxx_data['total_doses_in_fully_vaccinated_individuals'] = (
+        vaxx_data['total_doses_in_fully_vaccinated_individuals'].apply(remove_comma_to_int)
     )
     vaxx_data['total_individuals_fully_vaccinated'] = (
         vaxx_data['total_individuals_fully_vaccinated'].apply(remove_comma_to_int)
@@ -70,7 +72,7 @@ def import_data():
     )
     daily_report['num_part_vaccinated'] = (
         daily_report['total_doses_administered'] - 
-        daily_report['total_doses_in_fully_vaccinated_individuals ']
+        daily_report['total_doses_in_fully_vaccinated_individuals']
     )
     daily_report['positivity'] = (
         [0]*69 + 
@@ -163,7 +165,7 @@ def create_timeseries_cases_regional():
 
 def run():
     import_data()
-    create_timeseries_cases_regional()
+    # create_timeseries_cases_regional()
 
     
 
