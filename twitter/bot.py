@@ -8,9 +8,6 @@ Author:      Nicholas Chong
 Created:     2020-06-19 (YYYY/MM/DD)
 ----------------------------------------------------------------------------'''
 
-import urllib.request
-import pprint
-import json
 from . import tweets 
 from datetime import datetime
 

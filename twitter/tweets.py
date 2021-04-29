@@ -9,7 +9,6 @@ Created:     2020-06-19 (YYYY/MM/DD)
 
 import tweepy
 import os
-import logging
 
 auth = tweepy.OAuthHandler(
     os.getenv('API_KEY'), 
