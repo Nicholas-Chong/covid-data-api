@@ -39,6 +39,6 @@ def index(request):
 
     response = HttpResponse(json.dumps(res), content_type="application/json")
     response['Access-Control-Allow-Origin'] = '*'
-    # response['Cache-Control'] = 'max-age=1800'
+    response['Cache-Control'] = 'max-age=1800'
     response['Server-Timing'] = f'db;desc="Database";dur={end}'
     return response
