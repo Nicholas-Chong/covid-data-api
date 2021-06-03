@@ -95,7 +95,7 @@ def update_report():
             total_deaths = row['Deaths'],
             total_resolved = row['Resolved'],
             total_active = row['total_active'],
-            new_vaccinations = row['previous_day_doses_administered'],
+            new_vaccinations = row['previous_day_total_doses_administered'],
             num_fully_vaccinated = row['total_individuals_fully_vaccinated'],
             num_part_vaccinated = row['num_part_vaccinated'],            
             total_variant_p1 = row['Total_Lineage_P.1'],
